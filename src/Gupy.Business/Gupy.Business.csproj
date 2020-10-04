@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Gupy.Core\Gupy.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Azure.Storage.Blobs" Version="12.6.0" />
+      <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="7.22.0" />
+      <PackageReference Include="MediatR" Version="8.1.0" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.8" />
+    </ItemGroup>
+
+</Project>
