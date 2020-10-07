@@ -8,12 +8,9 @@ namespace Gupy.Core.MapperProfiles
     {
         public CategoryProfile()
         {
-            CreateMap<Category, CategoryDto>()
-                .ForMember(c => c.Photo,
-                    cfg => cfg.MapFrom(c => c.Photo.FileName));
+            CreateMap<Category, CategoryDto>();
             CreateMap<CategoryDto, Category>()
-                .ForMember(c => c.Photo,
-                    cfg => cfg.Ignore());
+                .ForMember(c => c.Photo, cfg => cfg.Ignore());
         }
     }
 }

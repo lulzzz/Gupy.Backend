@@ -6,7 +6,7 @@ using Gupy.Core.Settings;
 using MediatR;
 using Microsoft.Extensions.Options;
 
-namespace Gupy.Business.Commands.Photo.UploadPhoto
+namespace Gupy.Business.Commands.UploadPhoto
 {
     public class UploadPhotoCommandHandler : IRequestHandler<UploadPhotoCommand, string>
     {

@@ -6,9 +6,8 @@ namespace Gupy.Domain
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Photo Photo { get; set; }
+        public string Photo { get; set; }
 
-        public int? PhotoId { get; set; }
         public ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }

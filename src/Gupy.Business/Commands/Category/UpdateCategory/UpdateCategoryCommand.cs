@@ -2,7 +2,7 @@
 using Gupy.Core.Interfaces.Common;
 using MediatR;
 
-namespace Gupy.Business.Commands.Category.UpdateCategory
+namespace Gupy.Business.Commands.UpdateCategory
 {
     public class UpdateCategoryCommand : IRequest<CategoryDto>
     {

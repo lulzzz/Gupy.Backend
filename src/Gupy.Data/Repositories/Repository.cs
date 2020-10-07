@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Gupy.Data.Repositories
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly ApplicationDbContext Context;
 

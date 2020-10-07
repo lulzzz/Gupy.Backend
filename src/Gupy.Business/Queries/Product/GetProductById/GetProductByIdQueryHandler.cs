@@ -21,7 +21,7 @@ namespace Gupy.Business.Queries.Product.GetProductById
 
         public async Task<ProductDto> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
-            var product = await _productRepository.GetProductWithPhoto(request.ProductId);
+            var product = await _productRepository.GetAsync(request.ProductId);
             if (product == null)
             {
                 throw new NotFoundException(nameof(request.ProductId),

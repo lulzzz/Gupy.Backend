@@ -2,7 +2,7 @@
 using Gupy.Core.Interfaces.Common;
 using MediatR;
 
-namespace Gupy.Business.Commands.Product.UpdateProduct
+namespace Gupy.Business.Commands.UpdateProduct
 {
     public class UpdateProductCommand : IRequest<ProductDto>
     {

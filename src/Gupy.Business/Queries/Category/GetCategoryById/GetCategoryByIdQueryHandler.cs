@@ -21,7 +21,7 @@ namespace Gupy.Business.Queries.Category.GetCategoryById
 
         public async Task<CategoryDto> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
         {
-            var category = await _categoryRepository.GetCategoryWithPhotoAsync(request.CategoryId);
+            var category = await _categoryRepository.GetAsync(request.CategoryId);
             if (category == null)
             {
                 throw new NotFoundException(nameof(request.CategoryId),

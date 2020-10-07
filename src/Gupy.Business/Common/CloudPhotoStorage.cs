@@ -31,7 +31,7 @@ namespace Gupy.Business.Common
                 await client.UploadAsync(stream);
             }
 
-            return fileName;
+            return $"{_settings.StorageUrl}/{_settings.ContainerName}/{fileName}";
         }
 
         public async Task<bool> DeletePhotoAsync(string fileName)

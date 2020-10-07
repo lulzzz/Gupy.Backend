@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Gupy.Business.Commands.Product.DeleteProduct
+namespace Gupy.Business.Commands.DeleteProduct
 {
     public class DeleteProductCommand : IRequest
     {

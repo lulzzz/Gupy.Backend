@@ -2,7 +2,7 @@
 using Gupy.Core.Interfaces.Common;
 using MediatR;
 
-namespace Gupy.Business.Commands.Category.CreateCategory
+namespace Gupy.Business.Commands.CreateCategory
 {
     public class CreateCategoryCommand : IRequest<CategoryDto>
     {

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Gupy.Business.Commands.Category.DeleteCategory
+namespace Gupy.Business.Commands.DeleteCategory
 {
     public class DeleteCategoryCommand : IRequest
     {

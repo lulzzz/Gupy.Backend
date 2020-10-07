@@ -1,13 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Gupy.Business.Commands.Photo.UploadPhoto;
+using Gupy.Business.Commands.UploadPhoto;
 using Gupy.Core.Dtos;
 using Gupy.Core.Exceptions;
 using Gupy.Core.Interfaces.Data.Repositories;
 using MediatR;
 
-namespace Gupy.Business.Commands.Product.CreateProduct
+namespace Gupy.Business.Commands.CreateProduct
 {
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, ProductDto>
     {
@@ -37,7 +37,7 @@ namespace Gupy.Business.Commands.Product.CreateProduct
             if (request.Photo != null)
             {
                 var fileName = await _mediator.Send(new UploadPhotoCommand {Photo = request.Photo});
-                product.Photo = new Domain.Photo {FileName = fileName};
+                product.Photo = fileName;
             }
 
             await _productRepository.AddAsync(product);

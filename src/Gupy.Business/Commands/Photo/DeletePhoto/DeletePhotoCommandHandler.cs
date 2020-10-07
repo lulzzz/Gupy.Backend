@@ -4,7 +4,7 @@ using Gupy.Core.Exceptions;
 using Gupy.Core.Interfaces.Common;
 using MediatR;
 
-namespace Gupy.Business.Commands.Photo.DeletePhoto
+namespace Gupy.Business.Commands.DeletePhoto
 {
     public class DeletePhotoCommandHandler : AsyncRequestHandler<DeletePhotoCommand>
     {

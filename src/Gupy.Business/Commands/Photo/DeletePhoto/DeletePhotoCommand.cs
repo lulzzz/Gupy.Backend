@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Gupy.Business.Commands.Photo.DeletePhoto
+namespace Gupy.Business.Commands.DeletePhoto
 {
     public class DeletePhotoCommand : IRequest
     {

@@ -1,14 +1,14 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Gupy.Business.Commands.Photo.DeletePhoto;
-using Gupy.Business.Commands.Photo.UploadPhoto;
+using Gupy.Business.Commands.DeletePhoto;
+using Gupy.Business.Commands.UploadPhoto;
 using Gupy.Core.Dtos;
 using Gupy.Core.Exceptions;
 using Gupy.Core.Interfaces.Data.Repositories;
 using MediatR;
 
-namespace Gupy.Business.Commands.Category.UpdateCategory
+namespace Gupy.Business.Commands.UpdateCategory
 {
     public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, CategoryDto>
     {
@@ -25,33 +25,32 @@ namespace Gupy.Business.Commands.Category.UpdateCategory
 
         public async Task<CategoryDto> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var updatedCategory = _mapper.Map<Domain.Category>(request.CategoryDto);
-            var category = await _categoryRepository.GetCategoryWithPhotoAsync(updatedCategory.Id);
+            var categoryDto = request.CategoryDto;
+            var category = await _categoryRepository.GetAsync(categoryDto.Id);
             if (category == null)
             {
-                throw new NotFoundException(nameof(updatedCategory.Id),
-                    $"Category with id ({updatedCategory.Id}) does not exist");
+                throw new NotFoundException(nameof(categoryDto.Id),
+                    $"Category with id ({categoryDto.Id}) does not exist");
             }
 
-            if (!await _categoryRepository.CategoryIsUnique(updatedCategory.Id, updatedCategory.Name))
+            if (!await _categoryRepository.CategoryIsUnique(categoryDto.Id, categoryDto.Name))
             {
                 throw new NotValidException(nameof(category.Name),
-                    $"Category with such name ({updatedCategory.Name}) already exists");
+                    $"Category with such name ({categoryDto.Name}) already exists");
             }
 
             if (request.Photo != null)
             {
-                var oldPhoto = category.Photo;
-                if (oldPhoto != null)
+                if (!string.IsNullOrEmpty(category.Photo))
                 {
-                    await _mediator.Send(new DeletePhotoCommand {FileName = oldPhoto.FileName});
+                    await _mediator.Send(new DeletePhotoCommand {FileName = category.Photo});
                 }
 
                 var fileName = await _mediator.Send(new UploadPhotoCommand {Photo = request.Photo});
-                category.Photo = new Domain.Photo {FileName = fileName};
+                category.Photo = fileName;
             }
 
-            _mapper.Map(updatedCategory, category);
+            _mapper.Map(categoryDto, category);
             await _categoryRepository.UnitOfWork.SaveChangesAsync();
 
             var result = _mapper.Map<CategoryDto>(category);

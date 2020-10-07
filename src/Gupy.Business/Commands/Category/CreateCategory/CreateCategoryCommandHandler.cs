@@ -1,14 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Gupy.Business.Commands.Photo.UploadPhoto;
+using Gupy.Business.Commands.UploadPhoto;
 using Gupy.Core.Dtos;
 using Gupy.Core.Exceptions;
-using Gupy.Core.Interfaces.Common;
 using Gupy.Core.Interfaces.Data.Repositories;
 using MediatR;
 
-namespace Gupy.Business.Commands.Category.CreateCategory
+namespace Gupy.Business.Commands.CreateCategory
 {
     public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, CategoryDto>
     {
@@ -35,7 +34,7 @@ namespace Gupy.Business.Commands.Category.CreateCategory
             if (request.Photo != null)
             {
                 var fileName = await _mediator.Send(new UploadPhotoCommand {Photo = request.Photo});
-                category.Photo = new Domain.Photo {FileName = fileName};
+                category.Photo = fileName;
             }
 
             await _categoryRepository.AddAsync(category);

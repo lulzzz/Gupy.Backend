@@ -1,11 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Gupy.Business.Commands.Photo.DeletePhoto;
+using Gupy.Business.Commands.DeletePhoto;
 using Gupy.Core.Exceptions;
 using Gupy.Core.Interfaces.Data.Repositories;
 using MediatR;
 
-namespace Gupy.Business.Commands.Category.DeleteCategory
+namespace Gupy.Business.Commands.DeleteCategory
 {
     public class DeleteCategoryCommandHandler : AsyncRequestHandler<DeleteCategoryCommand>
     {
@@ -20,18 +20,18 @@ namespace Gupy.Business.Commands.Category.DeleteCategory
 
         protected override async Task Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
-            var category = await _categoryRepository.GetCategoryWithPhotoAsync(request.CategoryId);
+            var category = await _categoryRepository.GetAsync(request.CategoryId);
             if (category == null)
             {
                 throw new NotFoundException(nameof(request.CategoryId),
                     $"Product with id ({request.CategoryId}) does not exist");
             }
 
-            if (category.Photo != null)
+            if (!string.IsNullOrEmpty(category.Photo))
             {
                 await _mediator.Send(new DeletePhotoCommand
                 {
-                    FileName = category.Photo.FileName
+                    FileName = category.Photo
                 });
             }
 

@@ -1,24 +1,27 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Gupy.Business.Commands.Photo.DeletePhoto;
-using Gupy.Business.Commands.Photo.UploadPhoto;
+using Gupy.Business.Commands.DeletePhoto;
+using Gupy.Business.Commands.UploadPhoto;
 using Gupy.Core.Dtos;
 using Gupy.Core.Exceptions;
 using Gupy.Core.Interfaces.Data.Repositories;
 using MediatR;
 
-namespace Gupy.Business.Commands.Product.UpdateProduct
+namespace Gupy.Business.Commands.UpdateProduct
 {
     public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, ProductDto>
     {
         private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
-        public UpdateProductCommandHandler(IProductRepository productRepository, IMediator mediator, IMapper mapper)
+        public UpdateProductCommandHandler(IProductRepository productRepository, ICategoryRepository categoryRepository,
+            IMediator mediator, IMapper mapper)
         {
             _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
             _mediator = mediator;
             _mapper = mapper;
         }
@@ -27,23 +30,28 @@ namespace Gupy.Business.Commands.Product.UpdateProduct
         public async Task<ProductDto> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
             var productDto = request.ProductDto;
-            var product = await _productRepository.GetProductWithPhoto(productDto.Id);
+            var product = await _productRepository.GetAsync(productDto.Id);
             if (product == null)
             {
                 throw new NotFoundException(nameof(productDto.Id),
                     $"Product with such id ({productDto.Id}) does not exist!");
             }
 
+            if (!await _categoryRepository.CategoryExists(productDto.CategoryId))
+            {
+                throw new NotValidException(nameof(productDto.Id),
+                    $"Category with id ({productDto.CategoryId} does not exist)");
+            }
+
             if (request.Photo != null)
             {
-                var oldPhoto = product.Photo;
-                if (oldPhoto != null)
+                if (!string.IsNullOrEmpty(product.Photo))
                 {
-                    await _mediator.Send(new DeletePhotoCommand {FileName = oldPhoto.FileName});
+                    await _mediator.Send(new DeletePhotoCommand {FileName = product.Photo});
                 }
 
                 var fileName = await _mediator.Send(new UploadPhotoCommand {Photo = request.Photo});
-                product.Photo = new Domain.Photo {FileName = fileName};
+                product.Photo = fileName;
             }
 
             _mapper.Map(productDto, product);

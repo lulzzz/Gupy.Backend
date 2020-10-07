@@ -10,12 +10,6 @@ namespace Gupy.Data.EntityConfigurations
         {
             entity.HasKey(c => c.Id);
 
-            entity.HasOne(c => c.Photo)
-                .WithOne()
-                .HasForeignKey<Category>(c => c.PhotoId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.SetNull);
-
             entity.HasMany(c => c.Products)
                 .WithOne(c => c.Category)
                 .HasForeignKey(p => p.CategoryId)

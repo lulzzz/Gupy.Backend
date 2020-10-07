@@ -25,7 +25,5 @@ namespace Gupy.Core.Interfaces.Data.Repositories
         /// <param name="categoryName"></param>
         /// <returns>False if more than one category with such name exists. True otherwise</returns>
         Task<bool> CategoryIsUnique(int categoryId, string categoryName);
-
-        Task<Category> GetCategoryWithPhotoAsync(int categoryId);
     }
 }
