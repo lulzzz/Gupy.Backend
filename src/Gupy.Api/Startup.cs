@@ -1,9 +1,9 @@
 using System.Globalization;
+using System.IO;
 using System.Text.Json.Serialization;
 using AutoMapper;
 using Gupy.Api.Extensions;
 using Gupy.Business.Extensions;
-using Gupy.Business.Queries.Product.GetProductById;
 using Gupy.Business.Queries.Product.GetProducts;
 using Gupy.Core.MapperProfiles;
 using Gupy.Core.Settings;
@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 
 namespace Gupy.Api
@@ -82,12 +83,21 @@ namespace Gupy.Api
 
             app.ConfigureCustomExceptionMiddleware();
 
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Environment.WebRootPath, "files")),
+                RequestPath = "/files"
+            });
+
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture(CultureInfo.InvariantCulture)
             });
 
             app.UseStatusCodePages();
+
             app.UseRouting();
 
             app.UseCors();

@@ -20,12 +20,12 @@ namespace Gupy.Business.Common
             _imageProcessor = imageProcessor;
         }
 
-        public async Task<string> StorePhotoAsync(IFile file)
+        public async Task<string> StorePhotoAsync(IFile photo)
         {
-            var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+            var fileName = Guid.NewGuid() + Path.GetExtension(photo.FileName);
             var client = new BlobClient(_settings.ConnectionString, _settings.ContainerName, fileName);
 
-            var resizedPhoto = _imageProcessor.ResizeImage(file);
+            var resizedPhoto = _imageProcessor.ResizeImage(photo);
             await using (var stream = new MemoryStream(resizedPhoto))
             {
                 await client.UploadAsync(stream);

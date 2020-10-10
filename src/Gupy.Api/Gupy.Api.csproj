@@ -18,5 +18,9 @@
       <ProjectReference Include="..\Gupy.Data\Gupy.Data.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\files" />
+    </ItemGroup>
+
 
 </Project>

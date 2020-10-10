@@ -9,7 +9,7 @@ namespace Gupy.Business.Extensions
         public static void AddBusinessServices(this IServiceCollection services)
         {
             services.AddScoped<IImageProcessor, ImageProcessor>();
-            services.AddScoped<IPhotoStorage, CloudPhotoStorage>();
+            services.AddScoped<IPhotoStorage, FileSystemPhotoStorage>();
         }
     }
 }
