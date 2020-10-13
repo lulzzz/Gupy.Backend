@@ -72,11 +72,11 @@ namespace Gupy.Api.Controllers.Api
         [HttpDelete("{id:min(1)}")]
         public async Task<ActionResult> DeleteProduct([FromRoute] int id)
         {
-            await _mediator.Send(new DeleteProductCommand
+            var result = await _mediator.Send(new DeleteProductCommand
             {
                 ProductId = id
             });
-            return Ok();
+            return Ok(result);
         }
     }
 }

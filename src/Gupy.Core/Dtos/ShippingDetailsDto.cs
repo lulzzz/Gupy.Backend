@@ -1,13 +1,11 @@
-﻿ namespace Gupy.Domain
+﻿namespace Gupy.Core.Dtos
 {
-    public class ShippingDetails
+    public class ShippingDetailsDto
     {
         public int Id { get; set; }
         public string ReceiverName { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
-
         public int TelegramUserId { get; set; }
-        public TelegramUser TelegramUser { get; set; }
     }
 }

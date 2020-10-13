@@ -1,5 +1,6 @@
 ﻿using Gupy.Core.Interfaces.Data.Repositories;
 using Gupy.Data.Repositories;
+using Gupy.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,10 @@ namespace Gupy.Data.Extensions
         {
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ITelegramUserRepository, TelegramUserRepository>();
+            services.AddScoped<IReportRepository, ReportRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IShippingDetailsRepository, ShippingDetailsRepository>();
         }
     }
 }

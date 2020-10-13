@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Gupy.Domain;
 
-namespace Gupy.Domain
+namespace Gupy.Core.Dtos
 {
-    public class Order
+    public class OrderDto
     {
         public int Id { get; set; }
         public DateTime DateOrdered { get; set; }
         public DateTime? DateShipped { get; set; }
         public OrderStatus OrderStatus { get; set; }
-        public float TotalSum => OrderItems.Sum(oi => oi.Quantity * oi.PricePerUnit);
+        public float TotalSum { get; set; } 
 
-        public ShippingDetails ShippingDetails { get; set; }
         public int ShippingDetailsId { get; set; }
-        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public ICollection<OrderItemDto> OrderItems { get; set; } = new List<OrderItemDto>();
     }
 }

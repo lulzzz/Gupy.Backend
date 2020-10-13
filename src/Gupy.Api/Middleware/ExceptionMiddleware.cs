@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Gupy.Api.Helpers;
 using Gupy.Core.Exceptions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace Gupy.Api.Middleware
 {

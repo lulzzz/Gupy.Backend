@@ -12,8 +12,9 @@ namespace Gupy.Domain
         public string UserName { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime DateJoined { get; set; }
-        
+
         public ICollection<ShippingDetails> ShippingDetails { get; set; } = new List<ShippingDetails>();
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
         public ICollection<Report> Reports { get; set; } = new List<Report>();
     }
 }

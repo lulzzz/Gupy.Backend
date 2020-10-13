@@ -65,8 +65,8 @@ namespace Gupy.Api.Controllers.Api
         [HttpDelete("{id:min(1)}")]
         public async Task<ActionResult> DeleteCategory([FromRoute] int id)
         {
-            await _mediator.Send(new DeleteCategoryCommand {CategoryId = id});
-            return Ok();
+            var result = await _mediator.Send(new DeleteCategoryCommand {CategoryId = id});
+            return Ok(result);
         }
     }
 }

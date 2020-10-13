@@ -3,14 +3,16 @@ using System;
 using Gupy.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Gupy.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201010115105_AddUserReportDetails")]
+    partial class AddUserReportDetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,57 +36,6 @@ namespace Gupy.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("Gupy.Domain.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateOrdered")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("DateShipped")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("OrderStatus")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShippingDetailsId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TelegramUserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShippingDetailsId");
-
-                    b.HasIndex("TelegramUserId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("Gupy.Domain.OrderItem", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("PricePerUnit")
-                        .HasColumnType("float");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrderId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderItem");
                 });
 
             modelBuilder.Entity("Gupy.Domain.Product", b =>
@@ -205,34 +156,6 @@ namespace Gupy.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TelegramUsers");
-                });
-
-            modelBuilder.Entity("Gupy.Domain.Order", b =>
-                {
-                    b.HasOne("Gupy.Domain.ShippingDetails", "ShippingDetails")
-                        .WithMany()
-                        .HasForeignKey("ShippingDetailsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Gupy.Domain.TelegramUser", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("TelegramUserId");
-                });
-
-            modelBuilder.Entity("Gupy.Domain.OrderItem", b =>
-                {
-                    b.HasOne("Gupy.Domain.Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Gupy.Domain.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Gupy.Domain.Product", b =>

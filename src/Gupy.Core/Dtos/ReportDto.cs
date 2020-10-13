@@ -1,8 +1,9 @@
 ﻿using System;
+using Gupy.Domain;
 
-namespace Gupy.Domain
+namespace Gupy.Core.Dtos
 {
-    public class Report
+    public class ReportDto
     {
         public int Id { get; set; }
         public string Message { get; set; }
@@ -10,6 +11,5 @@ namespace Gupy.Domain
         public ReportType ReportType { get; set; }
 
         public int TelegramUserId { get; set; }
-        public TelegramUser TelegramUser { get; set; }
     }
 }
