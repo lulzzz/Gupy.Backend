@@ -84,7 +84,7 @@ namespace Gupy.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("orderitems");
                 });
 
             modelBuilder.Entity("Gupy.Domain.Product", b =>
@@ -115,11 +115,35 @@ namespace Gupy.Data.Migrations
                     b.Property<float>("Price")
                         .HasColumnType("float");
 
+                    b.Property<int?>("PromotionId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("PromotionId")
+                        .IsUnique();
+
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Gupy.Domain.Promotion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
+
+                    b.Property<float>("Price")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("promotions");
                 });
 
             modelBuilder.Entity("Gupy.Domain.Report", b =>
@@ -242,6 +266,11 @@ namespace Gupy.Data.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Gupy.Domain.Promotion", "Promotion")
+                        .WithOne("Product")
+                        .HasForeignKey("Gupy.Domain.Product", "PromotionId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Gupy.Domain.Report", b =>

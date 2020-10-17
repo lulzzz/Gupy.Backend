@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using Gupy.Core.Common;
 using Gupy.Core.Interfaces.Data.Repositories;
 using Gupy.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -14,17 +12,10 @@ namespace Gupy.Data.Repositories
         {
         }
 
-        public override Task<List<Order>> ListAsync(Specification<Order> specification = null)
+        protected override IQueryable<Order> IncludeChildren(IQueryable<Order> entities)
         {
-            var orders = Context.Orders.Include(o => o.OrderItems)
-                .Include(o => o.ShippingDetails).AsQueryable();
-
-            if (specification == null)
-            {
-                return orders.ToListAsync();
-            }
-
-            return orders.Where(specification.ToExpression()).ToListAsync();
+            entities = entities.Include(o => o.OrderItems);
+            return base.IncludeChildren(entities);
         }
 
         public Task<Order> GetOrderWithItems(int id)

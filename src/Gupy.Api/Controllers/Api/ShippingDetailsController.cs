@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Gupy.Api.Models.ShippingDetails;
-using Gupy.Business.Commands.ShippingDetails.CreateDetails;
-using Gupy.Business.Commands.ShippingDetails.DeleteDetails;
-using Gupy.Business.Queries.ShippingDetails.GetDetails;
-using Gupy.Business.Queries.ShippingDetails.GetDetailsById;
+using Gupy.Business.Commands.Details.CreateDetails;
+using Gupy.Business.Commands.Details.DeleteDetails;
+using Gupy.Business.Queries.Details.GetDetails;
+using Gupy.Business.Queries.Details.GetDetailsById;
 using Gupy.Core.Dtos;
 using Gupy.Domain;
 using MediatR;

@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 using AutoMapper;
 using Gupy.Api.Extensions;
 using Gupy.Business.Extensions;
-using Gupy.Business.Queries.Product.GetProducts;
+using Gupy.Business.Queries.Products.GetProducts;
 using Gupy.Core.MapperProfiles;
 using Gupy.Core.Settings;
 using Gupy.Data.Extensions;

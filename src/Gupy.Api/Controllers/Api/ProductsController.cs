@@ -3,11 +3,15 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Gupy.Api.Helpers;
 using Gupy.Api.Models.Product;
-using Gupy.Business.Commands.CreateProduct;
-using Gupy.Business.Commands.DeleteProduct;
-using Gupy.Business.Commands.UpdateProduct;
-using Gupy.Business.Queries.Product.GetProductById;
-using Gupy.Business.Queries.Product.GetProducts;
+using Gupy.Api.Models.Promotion;
+using Gupy.Business.Commands.Products.CreateProduct;
+using Gupy.Business.Commands.Products.DeleteProduct;
+using Gupy.Business.Commands.Products.UpdateProduct;
+using Gupy.Business.Commands.Promotions.CreatePromotion;
+using Gupy.Business.Commands.Promotions.DeletePromotion;
+using Gupy.Business.Commands.Promotions.UpdatePromotion;
+using Gupy.Business.Queries.Products.GetProductById;
+using Gupy.Business.Queries.Products.GetProducts;
 using Gupy.Core.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -34,13 +38,14 @@ namespace Gupy.Api.Controllers.Api
 
         [HttpGet]
         public async Task<ActionResult<List<ProductDto>>> GetProducts([FromQuery] int? categoryId,
-            [FromQuery] bool? available)
+            [FromQuery] bool? available, [FromQuery] bool? hasPromotion)
         {
             var result = await _mediator.Send(
                 new GetProductsQuery
                 {
                     CategoryId = categoryId,
-                    Available = available
+                    Available = available,
+                    HasPromotion = hasPromotion
                 });
             return Ok(result);
         }
@@ -75,6 +80,41 @@ namespace Gupy.Api.Controllers.Api
             var result = await _mediator.Send(new DeleteProductCommand
             {
                 ProductId = id
+            });
+            return Ok(result);
+        }
+
+        [HttpPost("{productId:min(1)}/promotion")]
+        public async Task<ActionResult<PromotionDto>> CreatePromotion([FromRoute] int productId,
+            [FromBody] CreatePromotionModel promotionModel)
+        {
+            var result = await _mediator.Send(new CreatePromotionCommand
+            {
+                ProductId = productId,
+                PromotionDto = _mapper.Map<PromotionDto>(promotionModel)
+            });
+            return Ok(result);
+        }
+
+        [HttpPut("{productId:min(1)}/promotion")]
+        public async Task<ActionResult<PromotionDto>> UpdatePromotion([FromRoute] int productId,
+            [FromBody] UpdatePromotionModel promotionModel)
+        {
+            var result = await _mediator.Send(new UpdatePromotionCommand
+            {
+                ProductId = productId,
+                PromotionDto = _mapper.Map<PromotionDto>(promotionModel)
+            });
+            return Ok(result);
+        }
+
+
+        [HttpDelete("{productId:min(1)}/promotion")]
+        public async Task<ActionResult> DeletePromotion([FromRoute] int productId)
+        {
+            var result = await _mediator.Send(new DeletePromotionCommand
+            {
+                ProductId = productId
             });
             return Ok(result);
         }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Gupy.Api.Models.Product;
+using Gupy.Api.Models.Promotion;
 using Gupy.Core.Dtos;
 
 namespace Gupy.Api.MapperProfile
@@ -18,6 +19,8 @@ namespace Gupy.Api.MapperProfile
             CreateMap<UpdateProductModel, ProductDto>()
                 .ForMember(p => p.Photo,
                     cfg => cfg.Ignore());
+
+            CreateMap<CreatePromotionModel, PromotionDto>();
         }
     }
 }

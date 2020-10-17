@@ -8,9 +8,12 @@ namespace Gupy.Core.MapperProfiles
     {
         public ProductProfile()
         {
-            CreateMap<Product, ProductDto>();
+            CreateMap<Product, ProductDto>()
+                .ForMember(p => p.PromotionMessage, cfg => cfg.MapFrom(p => p.Promotion.Message))
+                .ForMember(p => p.PromotionPrice, cfg => cfg.MapFrom(p => p.Promotion.Price));
+
             CreateMap<ProductDto, Product>()
-                .ForMember(p => p.Photo,cfg => cfg.Ignore());
+                .ForMember(p => p.Photo, cfg => cfg.Ignore());
         }
     }
 }

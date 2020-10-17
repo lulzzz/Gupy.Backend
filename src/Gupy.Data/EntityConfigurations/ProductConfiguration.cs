@@ -15,6 +15,11 @@ namespace Gupy.Data.EntityConfigurations
                 .HasForeignKey(p => p.CategoryId)
                 .IsRequired();
 
+            entity.HasOne(p => p.Promotion)
+                .WithOne(p => p.Product)
+                .HasForeignKey<Product>(p => p.PromotionId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
 
             entity.Property(p => p.Name)
                 .IsRequired()

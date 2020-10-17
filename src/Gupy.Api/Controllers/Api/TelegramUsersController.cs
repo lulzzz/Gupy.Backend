@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
 using Gupy.Api.Models.TelegramUser;
-using Gupy.Business.Commands.CreateUser;
-using Gupy.Business.Commands.TelegramUser.UpdateUser;
-using Gupy.Business.Queries.GetUserById;
+using Gupy.Business.Commands.TelegramUsers.CreateUser;
+using Gupy.Business.Commands.TelegramUsers.UpdateUser;
+using Gupy.Business.Queries.TelegramUsers.GetUserById;
 using Gupy.Core.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

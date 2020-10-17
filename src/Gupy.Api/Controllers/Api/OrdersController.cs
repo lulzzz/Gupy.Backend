@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Gupy.Api.Models.Order;
-using Gupy.Business.Commands.Order.ChangerOrderStatus;
-using Gupy.Business.Commands.Order.CreateOrder;
-using Gupy.Business.Queries.Order.GetOrderById;
-using Gupy.Business.Queries.Order.GetOrders;
+using Gupy.Business.Commands.Orders.ChangerOrderStatus;
+using Gupy.Business.Commands.Orders.CreateOrder;
+using Gupy.Business.Queries.Orders.GetOrderById;
+using Gupy.Business.Queries.Orders.GetOrders;
 using Gupy.Core.Dtos;
 using Gupy.Domain;
 using MediatR;

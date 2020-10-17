@@ -7,6 +7,7 @@ using Gupy.Core.Common;
 using Gupy.Core.Interfaces.Data.Repositories;
 using Gupy.Core.Interfaces.Data.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Gupy.Data.Repositories
 {
@@ -86,14 +87,24 @@ namespace Gupy.Data.Repositories
 
         public IUnitOfWork UnitOfWork => Context;
 
-        public virtual Task<List<TEntity>> ListAsync(Specification<TEntity> specification = null)
+        public Task<List<TEntity>> ListAsync(Specification<TEntity> specification = null)
         {
-            if (specification == null)
-            {
-                return Context.Set<TEntity>().ToListAsync();
-            }
-            
-            return Context.Set<TEntity>().Where(specification.ToExpression()).ToListAsync();
+            var entities = Context.Set<TEntity>().AsNoTracking();
+
+            entities = IncludeChildren(entities);
+
+            return specification == null
+                ? entities.ToListAsync()
+                : entities.Where(specification.ToExpression()).ToListAsync();
+        }
+
+        /// <summary>
+        /// Does nothing. Override this method to include children references in your repository
+        /// </summary>
+        /// <param name="entities"></param>
+        protected virtual IQueryable<TEntity> IncludeChildren(IQueryable<TEntity> entities)
+        {
+            return entities;
         }
     }
 }
