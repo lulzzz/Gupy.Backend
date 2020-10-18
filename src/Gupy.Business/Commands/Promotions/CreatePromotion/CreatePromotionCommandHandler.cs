@@ -25,8 +25,8 @@ namespace Gupy.Business.Commands.Promotions.CreatePromotion
             var product = await _productRepository.GetProductWithPromotionAsync(request.ProductId);
             if (product == null)
             {
-                throw new NotFoundException(nameof(request.PromotionDto.ProductId),
-                    $"Product with id ({request.PromotionDto.ProductId}) doesn't exist");
+                throw new NotFoundException(nameof(request.ProductId),
+                    $"Product with id ({request.ProductId}) doesn't exist");
             }
 
             if (product.Promotion != null)
@@ -34,7 +34,7 @@ namespace Gupy.Business.Commands.Promotions.CreatePromotion
                 throw new NotValidException(nameof(product.Promotion),
                     $"Product with id ({product.Id}) already has a promotion");
             }
-            
+
             var promotion = _mapper.Map<Promotion>(request.PromotionDto);
             product.Promotion = promotion;
             await _productRepository.UnitOfWork.SaveChangesAsync();

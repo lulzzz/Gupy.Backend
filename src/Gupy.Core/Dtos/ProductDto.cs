@@ -10,7 +10,6 @@
         public int CategoryId { get; set; }
         public string Photo { get; set; }
 
-        public float? PromotionPrice { get; set; }
-        public string PromotionMessage { get; set; }
+        public PromotionDto Promotion { get; set; }
     }
 }

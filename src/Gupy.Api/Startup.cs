@@ -51,7 +51,11 @@ namespace Gupy.Api
             services.BuildCors();
 
             services.AddControllers()
-                .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+                .AddJsonOptions(o =>
+                {
+                    o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    o.JsonSerializerOptions.IgnoreNullValues = true;
+                });
 
             services.AddAuthentication(o =>
             {
@@ -69,7 +73,7 @@ namespace Gupy.Api
             services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
             services.Configure<AzureSettings>(Configuration.GetSection("AzureSettings"));
             services.Configure<PhotoProcessorSettings>(Configuration.GetSection("PhotoProcessorSettings"));
-
+            
             services.AddRepositories();
             services.AddBusinessServices();
         }
