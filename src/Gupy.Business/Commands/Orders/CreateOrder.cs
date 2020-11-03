@@ -14,7 +14,7 @@ namespace Gupy.Business.Commands.Orders
     {
         public OrderDto OrderDto { get; set; }
     }
-    
+
     public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, OrderDto>
     {
         private readonly IOrderRepository _orderRepository;
@@ -61,7 +61,14 @@ namespace Gupy.Business.Commands.Orders
                         $"Product with id ({orderItem.ProductId}) is not available");
                 }
 
-                orderItem.PricePerUnit = product.Price;
+                if (product.PromotionEndDate < DateTime.UtcNow && product.PromotionPrice.HasValue)
+                {
+                    orderItem.PricePerUnit = product.PromotionPrice.Value;
+                }
+                else
+                {
+                    orderItem.PricePerUnit = product.Price;
+                }
             }
 
             await _orderRepository.AddAsync(order);

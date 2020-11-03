@@ -1,4 +1,6 @@
-﻿namespace Gupy.Core.Dtos
+﻿using System;
+
+namespace Gupy.Core.Dtos
 {
     public class ProductDto
     {
@@ -9,7 +11,7 @@
         public bool IsAvailable { get; set; }
         public int CategoryId { get; set; }
         public string Photo { get; set; }
-
-        public PromotionDto Promotion { get; set; }
+        public float? PromotionPrice { get; set; }
+        public DateTime? PromotionEndDate { get; set; }
     }
 }

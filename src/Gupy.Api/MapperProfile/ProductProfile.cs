@@ -19,8 +19,6 @@ namespace Gupy.Api.MapperProfile
             CreateMap<UpdateProductModel, ProductDto>()
                 .ForMember(p => p.Photo,
                     cfg => cfg.Ignore());
-
-            CreateMap<CreatePromotionModel, PromotionDto>();
         }
     }
 }
