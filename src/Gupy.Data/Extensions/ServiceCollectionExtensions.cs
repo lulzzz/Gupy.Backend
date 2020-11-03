@@ -23,7 +23,6 @@ namespace Gupy.Data.Extensions
             services.AddScoped<IReportRepository, ReportRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IShippingDetailsRepository, ShippingDetailsRepository>();
-            services.AddScoped<IPromotionRepository, PromotionRepository>();
         }
     }
 }

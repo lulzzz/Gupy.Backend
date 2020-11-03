@@ -20,8 +20,12 @@ namespace Gupy.Data.EntityConfigurations
                 .HasForeignKey(r => r.TelegramUserId)
                 .IsRequired();
 
-            entity.Property(u => u.UserName).HasMaxLength(64);
-            entity.Property(u => u.PhoneNumber).HasMaxLength(64);
+            entity.Property(u => u.TelegramId).IsRequired();
+            entity.Property(u => u.UserName).HasMaxLength(64).IsRequired(false);
+            entity.Property(u => u.PhoneNumber).HasMaxLength(64).IsRequired(false);
+            entity.Property(u => u.FirstName).IsRequired();
+            entity.Property(u => u.LastName).IsRequired(false);
+            entity.Property(u => u.DateJoined).IsRequired();
         }
     }
 }

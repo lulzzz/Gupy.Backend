@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
 using Gupy.Api.Models.TelegramUser;
-using Gupy.Business.Commands.TelegramUsers.CreateUser;
-using Gupy.Business.Commands.TelegramUsers.UpdateUser;
-using Gupy.Business.Queries.TelegramUsers.GetUserById;
+using Gupy.Business.Commands.TelegramUsers;
+using Gupy.Business.Queries.TelegramUsers;
 using Gupy.Core.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +23,7 @@ namespace Gupy.Api.Controllers.Api
         [HttpGet("{telegramId:min(1)}")]
         public async Task<ActionResult<TelegramUserDto>> GetUser([FromRoute] int telegramId)
         {
-            var result = await _mediator.Send(new GetUserByIdQuery {telegramId = telegramId});
+            var result = await _mediator.Send(new GetUserByIdQuery {TelegramId = telegramId});
             return Ok(result);
         }
 

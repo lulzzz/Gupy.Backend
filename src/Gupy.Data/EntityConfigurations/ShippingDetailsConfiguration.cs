@@ -15,9 +15,9 @@ namespace Gupy.Data.EntityConfigurations
                 .HasForeignKey(s => s.TelegramUserId)
                 .IsRequired();
 
-            entity.Property(s => s.ReceiverName).HasMaxLength(256);
-            entity.Property(s => s.PhoneNumber).HasMaxLength(64);
-            entity.Property(s => s.Address).HasMaxLength(256);
+            entity.Property(s => s.ReceiverName).HasMaxLength(256).IsRequired();
+            entity.Property(s => s.PhoneNumber).HasMaxLength(64).IsRequired();
+            entity.Property(s => s.Address).HasMaxLength(256).IsRequired();
         }
     }
 }

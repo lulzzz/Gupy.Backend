@@ -8,8 +8,14 @@ namespace Gupy.Data.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<OrderItem> entity)
         {
-            entity.ToTable("orderitems");
+            entity.ToTable("OrderItems");
             entity.HasKey(oi => new {oi.OrderId, oi.ProductId});
+
+            entity.Property(oi => oi.Quantity)
+                .IsRequired();
+
+            entity.Property(oi => oi.PricePerUnit)
+                .IsRequired();
         }
     }
 }

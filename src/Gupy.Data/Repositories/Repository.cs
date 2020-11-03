@@ -7,7 +7,6 @@ using Gupy.Core.Common;
 using Gupy.Core.Interfaces.Data.Repositories;
 using Gupy.Core.Interfaces.Data.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace Gupy.Data.Repositories
 {
@@ -15,7 +14,7 @@ namespace Gupy.Data.Repositories
     {
         protected readonly ApplicationDbContext Context;
 
-        public Repository(ApplicationDbContext context)
+        protected Repository(ApplicationDbContext context)
         {
             Context = context;
         }
@@ -87,15 +86,22 @@ namespace Gupy.Data.Repositories
 
         public IUnitOfWork UnitOfWork => Context;
 
-        public Task<List<TEntity>> ListAsync(Specification<TEntity> specification = null)
+        public Task<List<TEntity>> ListAsync(bool asNoTracking, params Specification<TEntity>[] specifications)
         {
-            var entities = Context.Set<TEntity>().AsNoTracking();
+            var entities = Context.Set<TEntity>().AsQueryable();
+            if (asNoTracking)
+            {
+                entities = entities.AsNoTracking();
+            }
 
             entities = IncludeChildren(entities);
 
-            return specification == null
-                ? entities.ToListAsync()
-                : entities.Where(specification.ToExpression()).ToListAsync();
+            foreach (var specification in specifications)
+            {
+                entities = entities.Where(specification.ToExpression());
+            }
+
+            return entities.ToListAsync();
         }
 
         /// <summary>

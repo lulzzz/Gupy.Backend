@@ -2,9 +2,8 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Gupy.Api.Models.Report;
-using Gupy.Business.Commands.Reports.CreateReport;
-using Gupy.Business.Queries.Reports.GetReportById;
-using Gupy.Business.Queries.Reports.GetReports;
+using Gupy.Business.Commands.Reports;
+using Gupy.Business.Queries.Reports;
 using Gupy.Core.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

@@ -15,7 +15,21 @@ namespace Gupy.Data.EntityConfigurations
                 .HasForeignKey(oi => oi.OrderId)
                 .IsRequired();
 
+            entity.HasOne(o => o.ShippingDetails)
+                .WithMany(s => s.Orders)
+                .HasForeignKey(o => o.ShippingDetailsId)
+                .IsRequired();
+
             entity.Ignore(o => o.TotalSum);
+
+            entity.Property(o => o.DateOrdered)
+                .IsRequired();
+
+            entity.Property(o => o.DateShipped)
+                .IsRequired(false);
+
+            entity.Property(o => o.OrderStatus)
+                .IsRequired();
         }
     }
 }

@@ -15,12 +15,6 @@ namespace Gupy.Data.EntityConfigurations
                 .HasForeignKey(p => p.CategoryId)
                 .IsRequired();
 
-            entity.HasOne(p => p.Promotion)
-                .WithOne(p => p.Product)
-                .HasForeignKey<Product>(p => p.PromotionId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.SetNull);
-
             entity.Property(p => p.Name)
                 .IsRequired()
                 .HasMaxLength(55);
@@ -31,6 +25,14 @@ namespace Gupy.Data.EntityConfigurations
 
             entity.Property(p => p.Price)
                 .IsRequired();
+
+            entity.Property(p => p.IsAvailable)
+                .IsRequired();
+
+            entity.Property(p => p.PromotionPrice)
+                .IsRequired(false);
+            entity.Property(p => p.PromotionEndDate)
+                .IsRequired(false);
         }
     }
 }

@@ -16,6 +16,12 @@ namespace Gupy.Data.EntityConfigurations
                 .IsRequired();
 
             entity.Property(r => r.Message).HasMaxLength(4096);
+            
+            entity.Property(r => r.DateReported)
+                .IsRequired();
+
+            entity.Property(r => r.ReportType)
+                .IsRequired();
         }
     }
 }

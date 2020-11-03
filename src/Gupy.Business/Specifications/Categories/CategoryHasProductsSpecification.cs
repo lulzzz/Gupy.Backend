@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
 using Gupy.Core.Common;
 using Gupy.Domain;
 
@@ -6,15 +8,16 @@ namespace Gupy.Business.Specifications.Categories
 {
     public class CategoryHasProductsSpecification : Specification<Category>
     {
+        private readonly bool _hasProducts;
+
         public CategoryHasProductsSpecification(bool hasProducts)
         {
-            if (hasProducts)
-            {
-                Expr = category => category.Products.Any();
-                return;
-            }
+            _hasProducts = hasProducts;
+        }
 
-            Expr = category => !category.Products.Any();
+        public override Expression<Func<Category, bool>> ToExpression()
+        {
+            return category => category.Products.Any() == _hasProducts;
         }
     }
 }

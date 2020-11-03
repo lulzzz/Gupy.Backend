@@ -100,8 +100,9 @@ namespace Gupy.Core.Interfaces.Data.Repositories
         /// <summary>
         /// Get list of entities constrained by <see cref="Specification{T}"/>
         /// </summary>
-        /// <param name="specification"></param>
+        /// <param name="asNoTracking">Should changes made to queried objects be tracked</param>
+        /// <param name="specifications"></param>
         /// <returns></returns>
-        Task<List<TEntity>> ListAsync(Specification<TEntity> specification = null);
+        public Task<List<TEntity>> ListAsync(bool asNoTracking = false, params Specification<TEntity>[] specifications);
     }
 }

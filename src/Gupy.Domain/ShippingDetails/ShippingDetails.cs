@@ -1,4 +1,6 @@
-﻿ namespace Gupy.Domain
+﻿ using System.Collections.Generic;
+
+ namespace Gupy.Domain
 {
     public class ShippingDetails
     {
@@ -9,5 +11,7 @@
 
         public int TelegramUserId { get; set; }
         public TelegramUser TelegramUser { get; set; }
+
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }
