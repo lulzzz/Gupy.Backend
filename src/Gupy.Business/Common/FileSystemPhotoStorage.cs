@@ -24,7 +24,7 @@ namespace Gupy.Business.Common
         public async Task<string> StorePhotoAsync(IFile photo)
         {
             var fileName = Guid.NewGuid() + Path.GetExtension(photo.FileName);
-            var filePath = Path.Combine(_environment.ContentRootPath, "wwwroot", "files", fileName);
+            var filePath = Path.Combine(_environment.ContentRootPath, "wwwroot", "files", "pictures", fileName);
 
             var resizedPhoto = _imageProcessor.ResizeImage(photo);
             using (var stream = new FileStream(filePath, FileMode.Create))
@@ -32,12 +32,12 @@ namespace Gupy.Business.Common
                 await stream.WriteAsync(resizedPhoto);
             }
 
-            return $"{_configuration.GetSection("HostName")}/files/{fileName}";
+            return $"{_configuration.GetSection("HostName").Value}/files/pictures/{fileName}";
         }
 
         public Task<bool> DeletePhotoAsync(string fileName)
         {
-            var filePath = Path.Combine(_environment.ContentRootPath, "wwwroot", "files", fileName);
+            var filePath = Path.Combine(_environment.ContentRootPath, "wwwroot", "files", "pictures", fileName);
             if (!File.Exists(filePath))
             {
                 return Task.FromResult(false);

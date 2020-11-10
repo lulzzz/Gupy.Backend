@@ -2,6 +2,7 @@ using System.Globalization;
 using System.IO;
 using System.Text.Json.Serialization;
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using Gupy.Api.Extensions;
 using Gupy.Business.Extensions;
 using Gupy.Business.Queries.Products;
@@ -14,6 +15,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -51,10 +54,12 @@ namespace Gupy.Api
             services.BuildCors();
 
             services.AddControllers()
-                .AddJsonOptions(o =>
+                .AddJsonOptions(o => { o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); })
+                .AddFluentValidation(fv =>
                 {
-                    o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                    o.JsonSerializerOptions.IgnoreNullValues = true;
+                    fv.ImplicitlyValidateChildProperties = true;
+                    fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                    fv.RegisterValidatorsFromAssembly(typeof(Startup).Assembly);
                 });
 
             services.AddAuthentication(o =>
@@ -73,13 +78,15 @@ namespace Gupy.Api
             services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
             services.Configure<AzureSettings>(Configuration.GetSection("AzureSettings"));
             services.Configure<PhotoProcessorSettings>(Configuration.GetSection("PhotoProcessorSettings"));
-            
+
             services.AddRepositories();
             services.AddBusinessServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.ConfigureLoggingMiddleware();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

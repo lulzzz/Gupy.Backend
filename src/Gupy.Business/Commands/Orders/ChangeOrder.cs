@@ -10,24 +10,25 @@ using MediatR;
 
 namespace Gupy.Business.Commands.Orders
 {
-    public class ChangeOrderStatusCommand : IRequest<OrderDto>
+    public class ChangeOrderCommand : IRequest<OrderDto>
     {
         public int OrderId { get; set; }
+        public DateTime? DateShipped { get; set; }
         public OrderStatus OrderStatus { get; set; }
     }
 
-    public class ChangeOrderStatusCommandHandler : IRequestHandler<ChangeOrderStatusCommand, OrderDto>
+    public class ChangeOrderCommandHandler : IRequestHandler<ChangeOrderCommand, OrderDto>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
 
-        public ChangeOrderStatusCommandHandler(IOrderRepository orderRepository, IMapper mapper)
+        public ChangeOrderCommandHandler(IOrderRepository orderRepository, IMapper mapper)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
         }
 
-        public async Task<OrderDto> Handle(ChangeOrderStatusCommand request, CancellationToken cancellationToken)
+        public async Task<OrderDto> Handle(ChangeOrderCommand request, CancellationToken cancellationToken)
         {
             var order = await _orderRepository.GetOrderWithItems(request.OrderId);
             if (order == null)
@@ -37,9 +38,22 @@ namespace Gupy.Business.Commands.Orders
             }
 
             order.OrderStatus = request.OrderStatus;
-            if (request.OrderStatus == OrderStatus.Completed)
+            order.DateShipped = request.DateShipped;
+            if (request.DateShipped != null)
             {
-                order.DateShipped = DateTime.UtcNow;
+                if (order.OrderStatus != OrderStatus.Completed)
+                {
+                    throw new NotValidException(nameof(request.OrderStatus),
+                        "Only completed orders can have shipped date");
+                }
+
+                if (request.DateShipped < order.DateOrdered)
+                {
+                    throw new NotValidException(nameof(request.DateShipped),
+                        "Date Shipped Should be later than date ordered");
+                }
+
+                order.DateShipped = request.DateShipped;
             }
 
             await _orderRepository.UnitOfWork.SaveChangesAsync();

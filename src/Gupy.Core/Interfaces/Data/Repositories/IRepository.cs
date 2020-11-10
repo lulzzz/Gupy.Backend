@@ -103,6 +103,6 @@ namespace Gupy.Core.Interfaces.Data.Repositories
         /// <param name="asNoTracking">Should changes made to queried objects be tracked</param>
         /// <param name="specifications"></param>
         /// <returns></returns>
-        public Task<List<TEntity>> ListAsync(bool asNoTracking = false, params Specification<TEntity>[] specifications);
+        public Task<List<TEntity>> ListAsync(bool asNoTracking = true, params Specification<TEntity>[] specifications);
     }
 }

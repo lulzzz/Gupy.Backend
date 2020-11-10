@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Gupy.Business.Commands.Photos;
@@ -49,11 +50,12 @@ namespace Gupy.Business.Commands.Categories
             {
                 if (!string.IsNullOrEmpty(category.Photo))
                 {
-                    await _mediator.Send(new DeletePhotoCommand {FileName = category.Photo});
+                    var fileName = category.Photo.Split('/').Last();
+                    await _mediator.Send(new DeletePhotoCommand {FileName = fileName});
                 }
 
-                var fileName = await _mediator.Send(new UploadPhotoCommand {Photo = request.Photo});
-                category.Photo = fileName;
+                var photoUrl = await _mediator.Send(new UploadPhotoCommand {Photo = request.Photo});
+                category.Photo = photoUrl;
             }
 
             _mapper.Map(categoryDto, category);

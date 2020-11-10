@@ -49,7 +49,7 @@ namespace Gupy.Business.Commands.Orders
             foreach (var orderItem in order.OrderItems)
             {
                 var product = await _productRepository.GetAsync(orderItem.ProductId);
-                if (product == null)
+                if (product == null || product.SoftDeleted)
                 {
                     throw new NotValidException(nameof(orderItem.ProductId),
                         $"Product with id ({orderItem.ProductId}) does not exist");

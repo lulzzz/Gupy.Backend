@@ -1,4 +1,5 @@
 using Gupy.Core.Interfaces.Data.UnitOfWork;
+using Gupy.Data.Extensions;
 using Gupy.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,8 +13,8 @@ namespace Gupy.Data
         public DbSet<Report> Reports { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<ShippingDetails> ShippingDetails { get; set; }
-        
-        
+
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
@@ -21,6 +22,14 @@ namespace Gupy.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
+                {
+                    entityType.AddSoftDeleteQueryFilter();
+                }
+            }
 
             base.OnModelCreating(modelBuilder);
         }

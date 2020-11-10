@@ -1,9 +1,9 @@
-﻿﻿namespace Gupy.Domain
+﻿namespace Gupy.Domain
 {
     public enum OrderStatus
     {
-        Completed,
         Pending,
-        Cancelled
+        Completed,
+        Cancelled,
     }
 }

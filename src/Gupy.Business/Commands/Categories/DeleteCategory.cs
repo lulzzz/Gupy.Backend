@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Gupy.Business.Commands.Photos;
+using Gupy.Business.Specifications.Products;
 using Gupy.Core.Exceptions;
 using Gupy.Core.Interfaces.Data.Repositories;
 using MediatR;
@@ -15,12 +16,13 @@ namespace Gupy.Business.Commands.Categories
     public class DeleteCategoryCommandHandler : AsyncRequestHandler<DeleteCategoryCommand>
     {
         private readonly ICategoryRepository _categoryRepository;
-        private readonly IMediator _mediator;
+        private readonly IProductRepository _productRepository;
 
-        public DeleteCategoryCommandHandler(ICategoryRepository categoryRepository, IMediator mediator)
+        public DeleteCategoryCommandHandler(ICategoryRepository categoryRepository,
+            IProductRepository productRepository)
         {
             _categoryRepository = categoryRepository;
-            _mediator = mediator;
+            _productRepository = productRepository;
         }
 
         protected override async Task Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
@@ -32,15 +34,11 @@ namespace Gupy.Business.Commands.Categories
                     $"Category with id ({request.CategoryId}) does not exist");
             }
 
-            if (!string.IsNullOrEmpty(category.Photo))
-            {
-                await _mediator.Send(new DeletePhotoCommand
-                {
-                    FileName = category.Photo
-                });
-            }
+            category.SoftDeleted = true;
+            
+            var products = await _productRepository.ListAsync(false, new ProductInCategorySpecification(category.Id));
+            products.ForEach(p => p.SoftDeleted = true);
 
-            _categoryRepository.Remove(category);
             await _categoryRepository.UnitOfWork.SaveChangesAsync();
         }
     }

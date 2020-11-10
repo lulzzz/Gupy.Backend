@@ -2,9 +2,11 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Gupy.Api.Models.Order;
+using Gupy.Business.Commands.Exports;
 using Gupy.Business.Commands.Orders;
 using Gupy.Business.Queries.Orders;
 using Gupy.Core.Dtos;
+using Gupy.Core.Interfaces.Common;
 using Gupy.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -54,13 +56,24 @@ namespace Gupy.Api.Controllers.Api
         }
 
         [HttpPut]
-        public async Task<ActionResult<OrderDto>> ChangeOrderStatus([FromBody] UpdateOrderStatusModel statusModel)
+        public async Task<ActionResult<OrderDto>> ChangeOrder([FromBody] UpdateOrderModel model)
         {
-            var result = await _mediator.Send(new ChangeOrderStatusCommand
+            var result = await _mediator.Send(new ChangeOrderCommand
             {
-                OrderId = statusModel.OrderId, OrderStatus = statusModel.OrderStatus
+                OrderId = model.Id,
+                DateShipped = model.DateShipped,
+                OrderStatus = model.OrderStatus
             });
             return Ok(result);
+        }
+
+        [HttpGet("export")]
+        public async Task<ActionResult<IFile>> ExportToExcel()
+        {
+            var result = await _mediator.Send(new ExportOrdersCommand());
+            return File(result.OpenReadStream(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                result.FileName);
         }
     }
 }

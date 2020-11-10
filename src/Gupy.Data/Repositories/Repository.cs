@@ -86,7 +86,7 @@ namespace Gupy.Data.Repositories
 
         public IUnitOfWork UnitOfWork => Context;
 
-        public Task<List<TEntity>> ListAsync(bool asNoTracking, params Specification<TEntity>[] specifications)
+        public Task<List<TEntity>> ListAsync(bool asNoTracking = true, params Specification<TEntity>[] specifications)
         {
             var entities = Context.Set<TEntity>().AsQueryable();
             if (asNoTracking)

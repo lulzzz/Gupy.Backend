@@ -20,10 +20,10 @@ namespace Gupy.Api.Controllers.Api
             _mapper = mapper;
         }
 
-        [HttpGet("{telegramId:min(1)}")]
-        public async Task<ActionResult<TelegramUserDto>> GetUser([FromRoute] int telegramId)
+        [HttpGet("{id:min(1)}")]
+        public async Task<ActionResult<TelegramUserDto>> GetUser([FromRoute] int id)
         {
-            var result = await _mediator.Send(new GetUserByIdQuery {TelegramId = telegramId});
+            var result = await _mediator.Send(new GetUserByIdQuery {id = id});
             return Ok(result);
         }
 
