@@ -10,7 +10,7 @@ namespace Gupy.Business.Queries.TelegramUsers
 {
     public class GetUserByIdQuery : IRequest<TelegramUserDto>
     {
-        public int id { get; set; }
+        public int TelegramUserId { get; set; }
     }
     
     public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, TelegramUserDto>
@@ -26,11 +26,11 @@ namespace Gupy.Business.Queries.TelegramUsers
 
         public async Task<TelegramUserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetAsync(request.id);
+            var user = await _userRepository.GetAsync(request.TelegramUserId);
             if (user == null)
             {
-                throw new NotFoundException(nameof(request.id),
-                    $"Telegram User with telegramId ({request.id}) does not exist");
+                throw new NotFoundException(nameof(request.TelegramUserId),
+                    $"Telegram User with telegramId ({request.TelegramUserId}) does not exist");
             }
 
             var response = _mapper.Map<TelegramUserDto>(user);

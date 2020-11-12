@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Gupy.Api.Models.Report;
 using Gupy.Business.Commands.Reports;
 using Gupy.Business.Queries.Reports;
 using Gupy.Core.Dtos;
+using HybridModelBinding;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,27 +21,24 @@ namespace Gupy.Api.Controllers.Api
             _mapper = mapper;
         }
 
-        [HttpGet("{id:min(1)}")]
-        public async Task<ActionResult<ReportDto>> GetReport([FromRoute] int id)
+        [HttpGet("{reportId:min(1)}")]
+        public async Task<ActionResult<ReportDto>> GetReport([FromHybrid] GetReportByIdQuery query)
         {
-            var result = await _mediator.Send(new GetReportByIdQuery {Id = id});
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ReportDto>>> GetReports([FromQuery] int? userId)
+        public async Task<ActionResult<List<ReportDto>>> GetReports([FromHybrid] GetReportsQuery query)
         {
-            var result = await _mediator.Send(new GetReportsQuery {UserId = userId});
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ReportDto>> CreateReport([FromBody] CreateReportModel reportModel)
+        public async Task<ActionResult<ReportDto>> CreateReport([FromHybrid] CreateReportCommand command)
         {
-            var result = await _mediator.Send(new CreateReportCommand
-            {
-                ReportDto = _mapper.Map<ReportDto>(reportModel)
-            });
+            var result = await _mediator.Send(command);
             return Ok(result);
         }
     }

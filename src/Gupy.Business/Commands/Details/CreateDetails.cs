@@ -11,7 +11,10 @@ namespace Gupy.Business.Commands.Details
 {
     public class CreateDetailsCommand : IRequest<ShippingDetailsDto>
     {
-        public ShippingDetailsDto ShippingDetailsDto { get; set; }
+        public string ReceiverName { get; set; }
+        public string Address { get; set; }
+        public string PhoneNumber { get; set; }
+        public int TelegramUserId { get; set; }
     }
 
     public class CreateDetailsCommandHandler : IRequestHandler<CreateDetailsCommand, ShippingDetailsDto>
@@ -30,7 +33,13 @@ namespace Gupy.Business.Commands.Details
 
         public async Task<ShippingDetailsDto> Handle(CreateDetailsCommand request, CancellationToken cancellationToken)
         {
-            var details = _mapper.Map<ShippingDetails>(request.ShippingDetailsDto);
+            var details = new ShippingDetails
+            {
+                ReceiverName = request.ReceiverName,
+                Address = request.Address,
+                PhoneNumber = request.PhoneNumber,
+                TelegramUserId = request.TelegramUserId
+            };
 
             var user = await _userRepository.GetAsync(details.TelegramUserId);
             if (user == null)

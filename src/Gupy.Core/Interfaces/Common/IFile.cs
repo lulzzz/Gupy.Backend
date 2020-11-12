@@ -8,6 +8,7 @@ namespace Gupy.Core.Interfaces.Common
     {
         long Length { get; }
         string FileName { get; }
+        byte[] FileContents { get; }
         Stream OpenReadStream();
         void CopyTo(Stream target);
         Task CopyToAsync(Stream target, CancellationToken cancellationToken = default);

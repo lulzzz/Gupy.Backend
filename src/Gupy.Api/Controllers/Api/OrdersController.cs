@@ -5,9 +5,11 @@ using Gupy.Api.Models.Order;
 using Gupy.Business.Commands.Exports;
 using Gupy.Business.Commands.Orders;
 using Gupy.Business.Queries.Orders;
+using Gupy.Core.Common;
 using Gupy.Core.Dtos;
 using Gupy.Core.Interfaces.Common;
 using Gupy.Domain;
+using HybridModelBinding;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,24 +26,17 @@ namespace Gupy.Api.Controllers.Api
             _mapper = mapper;
         }
 
-        [HttpGet("{id:min(1)}")]
-        public async Task<ActionResult<OrderDto>> GetOrder([FromRoute] int id)
+        [HttpGet("{orderId:min(1)}")]
+        public async Task<ActionResult<OrderDto>> GetOrder([FromHybrid] GetOrderByIdQuery query)
         {
-            var result = await _mediator.Send(new GetOrderByIdQuery
-            {
-                OrderId = id
-            });
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<OrderDto>>> GetOrders([FromQuery] int? userId,
-            [FromQuery] OrderStatus? orderStatus)
+        public async Task<ActionResult<List<OrderDto>>> GetOrders([FromHybrid] GetOrdersQuery query)
         {
-            var result = await _mediator.Send(new GetOrdersQuery
-            {
-                TelegramUserId = userId, OrderStatus = orderStatus
-            });
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 
@@ -55,15 +50,10 @@ namespace Gupy.Api.Controllers.Api
             return Ok(result);
         }
 
-        [HttpPut]
-        public async Task<ActionResult<OrderDto>> ChangeOrder([FromBody] UpdateOrderModel model)
+        [HttpPut("{orderId:min(1)}")]
+        public async Task<ActionResult<OrderDto>> ChangeOrder([FromHybrid] ChangeOrderCommand query)
         {
-            var result = await _mediator.Send(new ChangeOrderCommand
-            {
-                OrderId = model.Id,
-                DateShipped = model.DateShipped,
-                OrderStatus = model.OrderStatus
-            });
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 
@@ -71,7 +61,7 @@ namespace Gupy.Api.Controllers.Api
         public async Task<ActionResult<IFile>> ExportToExcel()
         {
             var result = await _mediator.Send(new ExportOrdersCommand());
-            return File(result.OpenReadStream(),
+            return File(result.FileContents,
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 result.FileName);
         }

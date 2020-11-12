@@ -6,6 +6,7 @@ using Gupy.Api.Models.Category;
 using Gupy.Business.Commands.Categories;
 using Gupy.Business.Queries.Categories;
 using Gupy.Core.Dtos;
+using HybridModelBinding;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,17 +23,17 @@ namespace Gupy.Api.Controllers.Api
             _mapper = mapper;
         }
 
-        [HttpGet("{id:min(1)}")]
-        public async Task<ActionResult<CategoryDto>> GetCategory([FromRoute] int id)
+        [HttpGet("{categoryId:min(1)}")]
+        public async Task<ActionResult<CategoryDto>> GetCategory([FromHybrid] GetCategoryByIdQuery query)
         {
-            var result = await _mediator.Send(new GetCategoryByIdQuery {CategoryId = id});
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CategoryDto>>> GetCategories([FromQuery] bool? hasProducts)
+        public async Task<ActionResult<List<CategoryDto>>> GetCategories([FromHybrid] GetCategoriesQuery query)
         {
-            var result = await _mediator.Send(new GetCategoriesQuery {HasProducts = hasProducts});
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 
@@ -45,7 +46,7 @@ namespace Gupy.Api.Controllers.Api
                 Photo = categoryModel.Photo != null ? new FileAdapter(categoryModel.Photo) : null
             });
 
-            return CreatedAtAction(nameof(GetCategory), new {id = result.Id}, result);
+            return Ok(result);
         }
 
         [HttpPut]
@@ -59,10 +60,10 @@ namespace Gupy.Api.Controllers.Api
             return Ok(result);
         }
 
-        [HttpDelete("{id:min(1)}")]
-        public async Task<ActionResult> DeleteCategory([FromRoute] int id)
+        [HttpDelete("{categoryId:min(1)}")]
+        public async Task<ActionResult> DeleteCategory([FromHybrid] DeleteCategoryCommand command)
         {
-            var result = await _mediator.Send(new DeleteCategoryCommand {CategoryId = id});
+            var result = await _mediator.Send(command);
             return Ok(result);
         }
     }

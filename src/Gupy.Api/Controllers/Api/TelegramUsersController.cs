@@ -4,6 +4,7 @@ using Gupy.Api.Models.TelegramUser;
 using Gupy.Business.Commands.TelegramUsers;
 using Gupy.Business.Queries.TelegramUsers;
 using Gupy.Core.Dtos;
+using HybridModelBinding;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,20 +21,17 @@ namespace Gupy.Api.Controllers.Api
             _mapper = mapper;
         }
 
-        [HttpGet("{id:min(1)}")]
-        public async Task<ActionResult<TelegramUserDto>> GetUser([FromRoute] int id)
+        [HttpGet("{telegramUserId:min(1)}")]
+        public async Task<ActionResult<TelegramUserDto>> GetUser([FromHybrid] GetUserByIdQuery query)
         {
-            var result = await _mediator.Send(new GetUserByIdQuery {id = id});
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult<TelegramUserDto>> CreateUser([FromBody] CreateUserModel userModel)
+        public async Task<ActionResult<TelegramUserDto>> CreateUser([FromHybrid] CreateUserCommand command)
         {
-            var result = await _mediator.Send(new CreateUserCommand
-            {
-                TelegramUserDto = _mapper.Map<TelegramUserDto>(userModel)
-            });
+            var result = await _mediator.Send(command);
             return Ok(result);
         }
 

@@ -8,7 +8,6 @@ namespace Gupy.Api.MapperProfile
     {
         public TelegramUserProfile()
         {
-            CreateMap<CreateUserModel, TelegramUserDto>();
             CreateMap<UpdateUserModel, TelegramUserDto>();
         }
     }

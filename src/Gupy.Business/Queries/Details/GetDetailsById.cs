@@ -6,7 +6,7 @@ using Gupy.Core.Exceptions;
 using Gupy.Core.Interfaces.Data.Repositories;
 using MediatR;
 
-namespace Gupy.Business.Queries.Details.GetDetailsById
+namespace Gupy.Business.Queries.Details
 {
     public class GetDetailsByIdQuery : IRequest<ShippingDetailsDto>
     {

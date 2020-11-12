@@ -9,6 +9,7 @@ using Gupy.Business.Queries.Products;
 using Gupy.Core.MapperProfiles;
 using Gupy.Core.Settings;
 using Gupy.Data.Extensions;
+using HybridModelBinding;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -60,7 +61,10 @@ namespace Gupy.Api
                     fv.ImplicitlyValidateChildProperties = true;
                     fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                     fv.RegisterValidatorsFromAssembly(typeof(Startup).Assembly);
-                });
+                })
+                .AddHybridModelBinder(o =>
+                    o.FallbackBindingOrder = new[] {Source.Route, Source.QueryString, Source.Body, Source.Form});
+            ;
 
             services.AddAuthentication(o =>
             {

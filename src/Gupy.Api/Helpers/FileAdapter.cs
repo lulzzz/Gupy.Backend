@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Gupy.Core.Interfaces.Common;
@@ -11,6 +12,7 @@ namespace Gupy.Api.Helpers
         private readonly IFormFile _file;
         public long Length => _file.Length;
         public string FileName => _file.FileName;
+        public byte[] FileContents => throw new NotSupportedException();
 
         public FileAdapter(IFormFile file)
         {

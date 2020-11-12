@@ -11,7 +11,7 @@ namespace Gupy.Business.Queries.Reports
     
     public class GetReportByIdQuery : IRequest<ReportDto>
     {
-        public int Id { get; set; }
+        public int ReportId { get; set; }
     }
     
     public class GetReportByIdQueryHandler : IRequestHandler<GetReportByIdQuery, ReportDto>
@@ -27,10 +27,10 @@ namespace Gupy.Business.Queries.Reports
 
         public async Task<ReportDto> Handle(GetReportByIdQuery request, CancellationToken cancellationToken)
         {
-            var report = await _reportRepository.GetAsync(request.Id);
+            var report = await _reportRepository.GetAsync(request.ReportId);
             if (report == null)
             {
-                throw new NotFoundException(nameof(request.Id), $"Report with id ({request.Id}) does not exist");
+                throw new NotFoundException(nameof(request.ReportId), $"Report with id ({request.ReportId}) does not exist");
             }
 
             var result = _mapper.Map<ReportDto>(report);

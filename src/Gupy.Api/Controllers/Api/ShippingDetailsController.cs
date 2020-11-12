@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Gupy.Api.Models.ShippingDetails;
 using Gupy.Business.Commands.Details;
 using Gupy.Business.Queries.Details;
-using Gupy.Business.Queries.Details.GetDetailsById;
 using Gupy.Core.Dtos;
 using Gupy.Domain;
+using HybridModelBinding;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,38 +22,32 @@ namespace Gupy.Api.Controllers.Api
             _mapper = mapper;
         }
 
-        [HttpGet("{id:min(1)}")]
-        public async Task<ActionResult<ShippingDetailsDto>> GetShippingDetails([FromRoute] int id)
+        [HttpGet("{shippingDetailsId:min(1)}")]
+        public async Task<ActionResult<ShippingDetailsDto>> GetShippingDetails([FromHybrid] GetDetailsByIdQuery query)
         {
-            var result = await _mediator.Send(new GetDetailsByIdQuery {ShippingDetailsId = id});
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ShippingDetailsDto>>> GetShippingDetails([FromQuery] int? userId)
+        public async Task<ActionResult<List<ShippingDetailsDto>>> GetShippingDetails([FromHybrid] GetDetailsQuery query)
         {
-            var result = await _mediator.Send(new GetDetailsQuery {TelegramUserId = userId});
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 
         [HttpPost]
         public async Task<ActionResult<ShippingDetails>> CreateShippingDetails(
-            [FromBody] CreateDetailsModel detailsModel)
+            [FromHybrid] CreateDetailsCommand command)
         {
-            var result = await _mediator.Send(new CreateDetailsCommand
-            {
-                ShippingDetailsDto = _mapper.Map<ShippingDetailsDto>(detailsModel)
-            });
+            var result = await _mediator.Send(command);
             return Ok(result);
         }
 
-        [HttpDelete("{id:min(1)}")]
-        public async Task<ActionResult> DeleteShippingDetails([FromRoute] int id)
+        [HttpDelete("{shippingDetailsId:min(1)}")]
+        public async Task<ActionResult> DeleteShippingDetails([FromHybrid] DeleteDetailsCommand command)
         {
-            var result = await _mediator.Send(new DeleteDetailsCommand
-            {
-                ShippingDetailsId = id
-            });
+            var result = await _mediator.Send(command);
             return Ok(result);
         }
     }

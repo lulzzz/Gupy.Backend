@@ -6,6 +6,7 @@ using Gupy.Api.Models.Product;
 using Gupy.Business.Commands.Products;
 using Gupy.Business.Queries.Products;
 using Gupy.Core.Dtos;
+using HybridModelBinding;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,24 +23,17 @@ namespace Gupy.Api.Controllers.Api
             _mediator = mediator;
         }
 
-        [HttpGet("{id:min(1)}")]
-        public async Task<ActionResult<ProductDto>> GetProduct([FromRoute] int id)
+        [HttpGet("{productId:min(1)}")]
+        public async Task<ActionResult<ProductDto>> GetProduct([FromHybrid] GetProductByIdQuery query)
         {
-            var result = await _mediator.Send(new GetProductByIdQuery {ProductId = id});
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProductDto>>> GetProducts([FromQuery] int? categoryId,
-            [FromQuery] bool? available, [FromQuery] bool? hasPromotion)
+        public async Task<ActionResult<List<ProductDto>>> GetProducts([FromHybrid] GetProductsQuery query)
         {
-            var result = await _mediator.Send(
-                new GetProductsQuery
-                {
-                    CategoryId = categoryId,
-                    Available = available,
-                    HasPromotion = hasPromotion
-                });
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 
@@ -52,7 +46,7 @@ namespace Gupy.Api.Controllers.Api
                 Photo = productModel.Photo != null ? new FileAdapter(productModel.Photo) : null
             });
 
-            return CreatedAtAction(nameof(GetProduct), new {id = result.Id}, result);
+            return Ok(result);
         }
 
         [HttpPut]
@@ -67,13 +61,10 @@ namespace Gupy.Api.Controllers.Api
             return Ok(result);
         }
 
-        [HttpDelete("{id:min(1)}")]
-        public async Task<ActionResult> DeleteProduct([FromRoute] int id)
+        [HttpDelete("{productId:min(1)}")]
+        public async Task<ActionResult> DeleteProduct([FromHybrid] DeleteProductCommand command)
         {
-            var result = await _mediator.Send(new DeleteProductCommand
-            {
-                ProductId = id
-            });
+            var result = await _mediator.Send(command);
             return Ok(result);
         }
     }

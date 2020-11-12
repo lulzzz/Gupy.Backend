@@ -8,20 +8,20 @@ namespace Gupy.Core.Common
 {
     public class ExcelFile : IFile
     {
-        private readonly byte[] _excelData;
         private readonly string _fileName;
-        public long Length => _excelData.Length;
+        public long Length => FileContents.Length;
         public string FileName => _fileName;
+        public byte[] FileContents { get; }
 
         public ExcelFile(string fileName, byte[] excelData)
         {
             _fileName = fileName;
-            _excelData = excelData;
+            FileContents = excelData;
         }
 
         public Stream OpenReadStream()
         {
-            return new MemoryStream(_excelData);
+            throw new NotSupportedException();
         }
 
         public void CopyTo(Stream target)
