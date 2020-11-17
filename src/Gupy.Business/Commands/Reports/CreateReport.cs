@@ -12,9 +12,12 @@ namespace Gupy.Business.Commands.Reports
 {
     public class CreateReportCommand : IRequest<ReportDto>
     {
-        public ReportDto ReportDto { get; set; }
+        public string Message { get; set; }
+        public ReportType ReportType { get; set; }
+
+        public int TelegramUserId { get; set; }
     }
-    
+
     public class CreateReportCommandHandler : IRequestHandler<CreateReportCommand, ReportDto>
     {
         private readonly IReportRepository _reportRepository;
@@ -31,8 +34,13 @@ namespace Gupy.Business.Commands.Reports
 
         public async Task<ReportDto> Handle(CreateReportCommand request, CancellationToken cancellationToken)
         {
-            var report = _mapper.Map<Report>(request.ReportDto);
-            report.DateReported = DateTime.UtcNow;
+            var report = new Report
+            {
+                Message = request.Message,
+                DateReported = DateTime.UtcNow,
+                ReportType = request.ReportType,
+                TelegramUserId = request.TelegramUserId
+            };
 
             var user = await _userRepository.GetAsync(report.TelegramUserId);
             if (user == null)

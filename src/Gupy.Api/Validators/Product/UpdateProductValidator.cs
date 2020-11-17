@@ -23,7 +23,7 @@ namespace Gupy.Api.Validators.Product
             RuleFor(p => p.PromotionPrice).NotNull().When(p => p.PromotionEndDate != null);
 
             RuleFor(p => p.PromotionEndDate).InclusiveBetween(DateTime.UtcNow.AddDays(1), DateTime.UtcNow.AddMonths(3))
-                .When(p => p.PromotionEndDate != null).When(p => p.PromotionPrice != null);
+                .When(p => p.PromotionEndDate != null);
             RuleFor(p => p.PromotionEndDate).NotNull().When(p => p.PromotionPrice != null);
         }
     }

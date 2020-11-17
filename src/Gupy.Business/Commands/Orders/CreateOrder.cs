@@ -71,6 +71,11 @@ namespace Gupy.Business.Commands.Orders
                 }
             }
 
+            if (order.TotalSum < 1)
+            {
+                throw new NotValidException(nameof(Order.TotalSum), "Order total sum should be greater than 1");
+            }
+
             await _orderRepository.AddAsync(order);
             await _orderRepository.UnitOfWork.SaveChangesAsync();
 

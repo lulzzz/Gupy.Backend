@@ -51,9 +51,9 @@ namespace Gupy.Api.Controllers.Api
         }
 
         [HttpPut("{orderId:min(1)}")]
-        public async Task<ActionResult<OrderDto>> ChangeOrder([FromHybrid] ChangeOrderCommand query)
+        public async Task<ActionResult<OrderDto>> ChangeOrder([FromHybrid] ChangeOrderCommand command)
         {
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(command);
             return Ok(result);
         }
 

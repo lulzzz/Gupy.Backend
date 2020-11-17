@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Gupy.Api.Models.Product
 {
@@ -10,8 +9,6 @@ namespace Gupy.Api.Models.Product
         public float Price { get; set; }
         public bool IsAvailable { get; set; }
         public int CategoryId { get; set; }
-        public float? PromotionPrice { get; set; }
-        public DateTime? PromotionEndDate { get; set; }
         public IFormFile Photo { get; set; }
     }
 }
